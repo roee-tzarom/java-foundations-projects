@@ -1,4 +1,10 @@
+// -----------------------------------------------------------------------------
+// Shared spreadsheet constants: grid dimensions, cell types, and display values.
+// Centralising them keeps evaluation and presentation rules consistent.
+// -----------------------------------------------------------------------------
+
 package Mavo_Le_Hisuve.Ex2;
+
 
 /**
  * This class contains a set of constants for Ex2 (I2CS, ArielU 2025A),
@@ -18,7 +24,9 @@ public class Ex2Utils {
     public static final String EMPTY_CELL = "";
     public static  final String[] ABC= {"A","B","C","D","E","F","G","H","I","J","K","L","O","M","N","P","Q","R","S","T","U","V","W","X","Y","Z"};
 
+
     // ****** not implemented in Ex2!! ******
     // public static final String[] FUNCTIONS = {"if", "sin", "cos", "pow", "min", "max"};
     // public static String[] B_OPS = {"<", ">", "==","!=", "<=", ">="};
 }
+

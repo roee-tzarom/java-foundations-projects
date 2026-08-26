@@ -1,4 +1,11 @@
+// -----------------------------------------------------------------------------
+// Cell contract: the common interface implemented by spreadsheet cells.
+// It separates raw input from the computed value, display type, and dependency
+// depth used by the sheet evaluation pass.
+// -----------------------------------------------------------------------------
+
 package Mavo_Le_Hisuve.Ex2;
+
 
 /**
  * ArielU. Intro2CS, Ex2: https://docs.google.com/document/d/1-18T-dj00apE4k1qmpXGOaqttxLn-Kwi/edit?usp=sharing&ouid=113711744349547563645&rtpof=true&sd=true
@@ -14,9 +21,12 @@ public interface Cell {
      */
     String getData();
 
+
 /** Changes the underline string of this cell
  *  */
     void setData(String s);
+
+
 
 
     /**
@@ -24,6 +34,7 @@ public interface Cell {
      * @return an int value (as defined in Ex2Utils)
      */
     public int getType();
+
 
     /**
      * Changes the type of this Cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
@@ -34,10 +45,3 @@ public interface Cell {
      * Computes the natural order of this entry (cell) in case of a number or a String =0, else 1+ thez max of all dependent cells.
      * @return an integer representing the "number of rounds" needed to compute this cell (using an iterative approach)..
      */
-    public int getOrder();
-    /**
-     * Changes the order of this Cell
-     * @param t
-     */
-    public void setOrder(int t);
-}

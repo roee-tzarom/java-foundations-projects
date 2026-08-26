@@ -1,6 +1,13 @@
+// -----------------------------------------------------------------------------
+// Entry point for Exercise 4. It gathers the exercise-specific operations into
+// one executable flow so the required behaviour can be demonstrated directly.
+// -----------------------------------------------------------------------------
+
 package Mavo_Le_Hisuve.Ex4;
 
+
 import static org.junit.Assert.assertTrue;
+
 
 public class mainEx4 {
     public static int[] maxS(int [] arr){
@@ -34,21 +41,3 @@ public class mainEx4 {
         int length = arr.length;
         double swap;
         for (int i = 0; i < length; i++) {
-            int randon = (int) (Math.random()*length-1);
-            swap = arr[i];
-            arr[i] = arr[randon];
-            arr[randon] = swap;
-        }
-    }
-    public static void main(String[] args) {
-        int[] arr1 = {0,0,0,0};
-        int[] arr2 = {5,1,3,5,8};
-        int[] ans1 = maxS(arr1);
-        int[] ans2 = maxS(arr2);
-        double[] arr = {5.4, 3.1, 8.0};
-        shuffle(arr);
-        System.out.println(ans2[0] + "-" + ans2[1] + "-" + ans2[2]);
-        System.out.println(ans1[0] + "-" + ans1[1] + "-" + ans1[2] + "-" + ans1[3]);
-        System.out.println(arr[0] + "," + arr[1] + "," + arr[2]);
-    }
-}

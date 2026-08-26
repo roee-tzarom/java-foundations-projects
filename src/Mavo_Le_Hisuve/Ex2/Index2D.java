@@ -1,4 +1,10 @@
+// -----------------------------------------------------------------------------
+// Two-dimensional index abstraction used to represent worksheet coordinates.
+// It provides a small shared vocabulary for x/y positions and labels.
+// -----------------------------------------------------------------------------
+
 package Mavo_Le_Hisuve.Ex2;
+
 
 /**
  * ArielU. Intro2CS, Ex2: https://docs.google.com/document/d/1-18T-dj00apE4k1qmpXGOaqttxLn-Kwi/edit?usp=sharing&ouid=113711744349547563645&rtpof=true&sd=true
@@ -13,11 +19,13 @@ public interface Index2D {
      */
     public String toString();
 
+
     /**
      * checks of the string representation of this index is valid "XY" as X is a letter "A-Z" (or "a-z"), and Y is an integer [0-99].
      * @return true iff this is a valid 2D index.
      */
     public boolean isValid();
+
 
     /**
      *
@@ -29,3 +37,4 @@ public interface Index2D {
      */
     public int getY();
 }
+

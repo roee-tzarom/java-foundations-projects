@@ -1,24 +1,16 @@
-// -----------------------------------------------------------------------------
-// Demonstration entry point for the number-system utilities. It exercises the
-// public operations with representative values and formats their results.
-// -----------------------------------------------------------------------------
-
 package Mavo_Le_Hisuve.number_base_calculator;
 import java.util.Scanner;
-
 
 public class BaseNumberCalculatorApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String num1 = "", num2 = "", quit = "quit";
 
-
         while (!num1.equals(quit) && !num2.equals(quit)) {
             System.out.println();
             System.out.println("BaseNumberCalculator class solution:");
             System.out.println("Enter a string as number#1 (or \"quit\" to end the program): ");
             num1 = sc.next();
-
 
             if (!num1.equals(quit)) {
                 boolean isNum1Valid = BaseNumberCalculator.isNumber(num1);
@@ -30,11 +22,9 @@ public class BaseNumberCalculatorApp {
                 }
                 System.out.println("num1= " + num1 + " is number: " + isNum1Valid + " , value: " + value1);
 
-
                 if (isNum1Valid) {
                     System.out.println("Enter a string as number#2 (or \"quit\" to end the program): ");
                     num2 = sc.next();
-
 
                     if (!num2.equals(quit)) {
                         boolean isNum2Valid = BaseNumberCalculator.isNumber(num2);
@@ -44,3 +34,45 @@ public class BaseNumberCalculatorApp {
                         } else {
                             value2 = -1;
                         }
+
+                        System.out.println("num2= " + num2 + " is number: " + isNum2Valid + " , value: " + value2);
+
+                        if (isNum2Valid) {
+                            System.out.println("Enter a base for output: (a number [2,16])");
+                            int base = sc.nextInt();
+
+                            if (base == 10){
+                                int decimalSum = BaseNumberCalculator.number2Int(num1) + BaseNumberCalculator.number2Int(num2);
+                                int decimalProduct = BaseNumberCalculator.number2Int(num1) * BaseNumberCalculator.number2Int(num2);
+
+                                System.out.println(num1 + " + " + num2 + " = " + decimalSum);
+                                System.out.println(num1 + " * " + num2 + " = " + decimalProduct);
+
+                                String[] numbers = {num1, num2, String.valueOf(decimalSum), String.valueOf(decimalProduct)};
+                                int maxValue = BaseNumberCalculator.maxIndex(numbers);
+
+                                System.out.println("Max number over [" + num1 + "," + num2 + "," + decimalSum + "," + decimalProduct + "] is: " + numbers[maxValue]);
+                            }
+                            else if (base >= 2 && base <= 16) {
+                                String sum = BaseNumberCalculator.int2Number((value1 + value2), base);
+                                String product = BaseNumberCalculator.int2Number((value1 * value2), base);
+
+                                System.out.println(num1 + " + " + num2 + " = " + sum);
+                                System.out.println(num1 + " * " + num2 + " = " + product);
+
+                                String[] numbers = {num1, num2, sum, product};
+                                int maxValue = BaseNumberCalculator.maxIndex(numbers);
+
+                                System.out.println("Max number over [" + num1 + "," + num2 + "," + sum + "," + product + "] is: " + numbers[maxValue]);
+                            } else {
+                                System.out.println("ERR: Invalid base input! (" + base + ")");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("quitting now...");
+        sc.close();
+    }
+}

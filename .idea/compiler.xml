@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Ex1" options="" />
+      <module name="java-foundations-projects" options="" />
     </option>
   </component>
 </project>

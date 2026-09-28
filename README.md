@@ -28,3 +28,18 @@ java -cp out Mavo_Le_Hisuve.Ex1.Ex1Main
 ```
 
 For the spreadsheet GUI, run `Mavo_Le_Hisuve.Ex2.Ex2GUI` from a Java IDE with `src/` marked as the source root. Test files use JUnit; configure that dependency separately before running them. The repository contains course-provided interfaces, support classes and test material alongside original exercise code.
+
+
+## Spreadsheet workflow
+
+The spreadsheet is the most substantial part of this repository. A user edits a cell through `Ex2GUI`; `Ex2Sheet` stores the grid and asks `SCell` to classify its content. Plain numbers and text can be displayed directly. A formula is parsed as an arithmetic expression, and references cause the evaluator to inspect other cells. Dependency depth and cycle checks prevent a circular chain from being treated as a numeric result. Error types distinguish invalid formulas and circular references. The sheet can save and load a text representation, so a session is not limited to the GUI runtime.
+
+The GUI uses `StdDrawEx2`, which is included with the course material. The engine and UI are separable when reading the code: start with `Ex2Sheet.java`, then `SCell.java` and the `Compute/` package, and finally `Ex2GUI.java`. `Ex2SheetTest.java` captures expected spreadsheet behavior.
+
+## Other exercises and provenance
+
+`Ex1` implements base-number parsing and arithmetic as a console exercise. `Ex3` explores geometric types, filters and data structures. `Ex4` and `Architecture/` contain separate algorithm and student-grade exercises. These directories are independent assignments rather than layers of one application. The repository also includes teaching interfaces, drawing support and test scaffolding; inspect file headers when attributing an individual component.
+
+## Practical limits
+
+The formula language is intentionally narrower than Excel or Google Sheets: basic arithmetic and cell references are the useful path, while functions such as `sin` and `if` are not implemented. There is no Maven or Gradle project file tying all exercises together, so an IDE with `src/` as the source root is the simplest way to explore the larger coursework. A JDK and a configured JUnit dependency are needed to run the corresponding tests.

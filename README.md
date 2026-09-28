@@ -1,28 +1,24 @@
-# Java Foundations: Spreadsheet Engine and Number-Base Calculator
+# Java Spreadsheet Engine and Number-Base Calculator
 
-Two named Java projects anchor this coursework collection: an interactive spreadsheet and a number-base calculator. Additional geometry, data-structure and algorithm exercises remain in their original course folders. The projects are learning implementations, with their behavior and limitations described below so a reviewer can move directly from the overview to runnable code.
+This repository presents two Java projects: a desktop spreadsheet for exploring formulas and cell dependencies, and a console calculator for working with positional number systems. Each project has its own entry point and focused README. The spreadsheet is the larger application and the best place to start if you want to review the design.
 
-## Start here
+## Spreadsheet engine
 
-| Project | What it does | Entry point |
-| --- | --- | --- |
-| [Spreadsheet engine](src/Mavo_Le_Hisuve/spreadsheet_engine/) | Edits a cell grid, evaluates arithmetic formulas and references, reports formula/cycle errors, and saves or loads sheet content | `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp` |
-| [Number-base calculator](src/Mavo_Le_Hisuve/number_base_calculator/) | Parses and converts textual numbers in supported bases and runs an interactive arithmetic example | `Mavo_Le_Hisuve.number_base_calculator.BaseNumberCalculatorApp` |
-| `src/Mavo_Le_Hisuve/Ex3/` | Geometry, filters, lists and trees | Independent examples |
-| `src/Mavo_Le_Hisuve/Ex4/` | Additional array and algorithm practice | Independent examples |
-| `src/Architecture/` | Student-grade modeling exercise | Independent example |
+The [spreadsheet engine](src/Mavo_Le_Hisuve/spreadsheet_engine/) models a worksheet as a two-dimensional collection of cells. A cell can hold plain text, a number, or a formula that begins with `=`. Formulas support arithmetic operators, parentheses, and references to other cells. For example, with `5` in `A0`, the formula `=A0+7` in `B0` evaluates to `12`. The default configuration defines a 9-column by 17-row grid.
 
-## Spreadsheet architecture
+The code separates the desktop interface from calculation. `SpreadsheetApp` reads keyboard and mouse actions and draws the sheet through `SpreadsheetCanvas`. `Spreadsheet` owns the grid and implements the `Sheet` contract. Each `SCell` keeps its entered text and display state. The result classes in `Compute/` distinguish numbers, text, and invalid formulas, allowing the interface to show an error rather than treating every input as a numeric value.
 
-`SpreadsheetApp` renders the grid and sends edits to the `Sheet` interface. `Spreadsheet` owns the two-dimensional cells, resolves references and coordinates recalculation and text-file persistence. `SCell` stores each cell's raw content and its relationship to the sheet. Types in `Compute/` distinguish numeric results, text and formula errors. A dependency-depth pass identifies formulas that can be evaluated and marks circular references as errors. The parser covers arithmetic and cell references; it does not implement general spreadsheet functions such as `IF` or `SIN`.
-
-The GUI uses the included `SpreadsheetCanvas` drawing support, adapted from course material. The original course interfaces, support code and reference artifact remain alongside the implementation. The screenshot below shows the intended desktop interface.
+References create dependencies between cells. Before calculating the displayed values, the sheet computes dependency depth: a cell that only contains a value can be handled immediately, while a formula referencing another cell waits for that cell. A circular dependency remains unresolved and is marked as a cycle error. The sheet also has text-file save and load methods; its format records coordinates and cell data rather than using an Excel workbook format.
 
 ![Spreadsheet GUI example](https://github.com/user-attachments/assets/339f699e-356f-490c-aba2-0c88c8009ec1)
 
-## Run the projects
+To explore the implementation, begin at `SpreadsheetApp.java`, follow edits into `Spreadsheet.java`, then inspect `SCell.java`, `CellEntry.java`, and the result types under `Compute/`. `SpreadsheetTest.java` contains examples for parsing, arithmetic, references, bounds checks, and cycle depth. The included drawing support and reference artifact originate from the course materials.
 
-Use a JDK and run these commands from the repository root. The calculator has no external runtime dependency:
+## Number-base calculator
+
+The [number-base calculator](src/Mavo_Le_Hisuve/number_base_calculator/) is a separate console project. `BaseNumberCalculator` validates textual numbers, converts them to decimal integers, formats integers in bases 2 through 16, compares values represented in different bases, and finds the greatest valid value in an array. The notation `10011b2`, for instance, represents decimal `19`. `BaseNumberCalculatorApp` provides an interactive two-number flow, while `BaseNumberCalculatorTest` captures conversion and validation cases.
+
+Run the calculator from the repository root with a JDK:
 
 ```bash
 mkdir -p out
@@ -30,12 +26,8 @@ javac -d out src/Mavo_Le_Hisuve/number_base_calculator/BaseNumberCalculator.java
 java -cp out Mavo_Le_Hisuve.number_base_calculator.BaseNumberCalculatorApp
 ```
 
-For the spreadsheet, open the repository in a Java IDE with `src/` marked as a source root and run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp`. It requires a desktop display. `SpreadsheetTest.java` and `BaseNumberCalculatorTest.java` use JUnit; configure the relevant JUnit dependency in the IDE before running them. There is no unified Maven or Gradle build for the full coursework repository.
+## Running the spreadsheet and project scope
 
-## Read the code
+Open the repository in a Java IDE, mark `src/` as a source root, and run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp` in a desktop environment. The spreadsheet uses Java's pattern matching in `switch`, so use JDK 21 or newer. Configure JUnit 5 separately to run both projects' tests. There is no unified Maven or Gradle build file.
 
-For the spreadsheet, start with `SpreadsheetApp.java`, then follow the `Sheet` interface into `Spreadsheet.java`, `SCell.java` and `Compute/`. For the calculator, begin with `BaseNumberCalculatorApp.java` and inspect the conversion and validation methods in `BaseNumberCalculator.java`. Each named project also has its own README with a focused file map and execution notes.
-
-## Scope and provenance
-
-This repository contains independent academic exercises and some supplied course scaffolding. The spreadsheet is a local desktop application, not a replacement for Excel or a multi-user service. The calculator demonstrates base conversion rather than an arbitrary-precision numeric library. The remaining `Ex3`/`Ex4` folders have not been renamed as part of this focused cleanup; their code is unrelated to the two projects above.
+These are local academic projects. The spreadsheet supports the formulas implemented in its parser; functions such as `IF` and `SIN`, collaborative editing, and `.xlsx` import/export are outside its scope. The calculator uses ordinary Java integers rather than arbitrary-precision arithmetic. The individual project READMEs provide more detail without requiring a reviewer to navigate unrelated folders.

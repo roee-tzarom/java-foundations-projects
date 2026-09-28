@@ -1,29 +1,19 @@
 # Spreadsheet Engine
 
-A small Java desktop spreadsheet with a cell grid, arithmetic formulas, references, cycle/error handling and text-file persistence. The code is under the `Mavo_Le_Hisuve.spreadsheet_engine` package.
+A Java desktop worksheet that evaluates arithmetic formulas and cell references. Its default sheet has 9 columns and 17 rows, with a GUI for editing and inspecting cells. The application is a focused demonstration of parsing, dependency ordering, and object-oriented separation between a model and its interface.
 
-## How a cell update flows
+## What happens when a cell changes
 
-1. `SpreadsheetApp` receives a GUI edit and updates the sheet through `Sheet`.
-2. `Spreadsheet` stores the raw input in an `SCell` and evaluates dependent content.
-3. The evaluator parses arithmetic and references and uses dependency depth to detect cycles.
-4. `Compute/` result types separate ordinary numbers or text from formula errors.
-5. The GUI chooses what to display for each cell; save/load methods preserve sheet content in a text file.
+`SpreadsheetApp` receives the edit from the GUI and writes the entered text through the `Sheet` interface. `Spreadsheet` stores it in an `SCell`, then calculates what should be displayed. Numeric input can be parsed directly. Input beginning with `=` goes through the formula evaluator, which handles parentheses, `+`, `-`, `*`, `/`, and references such as `A0`. Other input is represented as text or a formula error as appropriate. The classes in `Compute/` provide distinct result types for those cases.
 
-## Code map
+Dependencies matter when formulas refer to one another. The `depth()` method gives cells an evaluation order based on the references it finds. If references form a cycle, they cannot receive a finite depth and the sheet reports a cycle error. Tests include a chain of references and a two-cell cycle. This is an intentionally small formula language, so a reviewer can follow the parser and dependency logic within one core class.
 
-| File or folder | Role |
-| --- | --- |
-| `SpreadsheetApp.java` | Desktop application entry point and UI event handling |
-| `Spreadsheet.java` | Grid, formula evaluation, reference resolution and persistence |
-| `SCell.java`, `Cell.java`, `CellEntry.java`, `Index2D.java` | Cell model and coordinate contracts |
-| `Compute/` | Numeric, text and error result types |
-| `SpreadsheetConfig.java` | Grid and UI constants |
-| `SpreadsheetCanvas.java` | Included drawing support adapted from course material |
-| `SpreadsheetTest.java` | JUnit behavioral examples |
+The sheet can save non-empty cells to a text file as coordinate/data records and load that format later. This is persistence for the exercise, not an Excel workbook importer. `SpreadsheetCanvas` supplies the drawing primitives used by the GUI; it is adapted course support code. `SpreadsheetConfig` holds grid dimensions and display constants, while `CellEntry` and `Index2D` represent locations in the grid.
 
-## Run and limits
+## Run and inspect
 
-Open the repository in a Java IDE, mark `src/` as a source root and run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp` with a desktop display. Configure JUnit separately to run `SpreadsheetTest`. The supported formula language covers arithmetic and cell references; general spreadsheet functions, multi-user editing and Excel file formats are outside its scope. The included reference JAR and interfaces are course materials, not a dependency required to launch this implementation.
+Open the repository in a Java IDE with `src/` as a source root. With JDK 21 or newer and a desktop display, run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp`. Start reading at `SpreadsheetApp.java` for UI flow and `Spreadsheet.java` for formula and reference logic. `SpreadsheetTest.java` uses JUnit 5 and contains examples of arithmetic, cell references, bounds, and dependency depth.
 
-[Return to the repository overview](../../../README.md).
+The current implementation does not provide spreadsheet functions such as `IF` or `SIN`, network collaboration, or `.xlsx` support. The included course reference JAR is preserved for provenance and is not needed to launch the app.
+
+[Back to the repository overview](../../../README.md).

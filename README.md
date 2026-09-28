@@ -1,45 +1,41 @@
-# Java Foundations Projects
+# Java Foundations: Spreadsheet Engine and Number-Base Calculator
 
-Coursework in Java spanning base-number arithmetic, a small spreadsheet engine, geometry and data-structure exercises. The main project is the spreadsheet in `src/Mavo_Le_Hisuve/Ex2/`.
+Two named Java projects anchor this coursework collection: an interactive spreadsheet and a number-base calculator. Additional geometry, data-structure and algorithm exercises remain in their original course folders. The projects are learning implementations, with their behavior and limitations described below so a reviewer can move directly from the overview to runnable code.
 
-## Project guide
+## Start here
 
-| Folder | Contents |
-| --- | --- |
-| `src/Mavo_Le_Hisuve/Ex1/` | Interactive number-base parsing, conversion and arithmetic |
-| `src/Mavo_Le_Hisuve/Ex2/` | Grid of cells, formula calculation, references, cycle/error detection, text-file save/load and a desktop GUI |
-| `src/Mavo_Le_Hisuve/Ex3/` | Geometry shapes and filters, arrays, lists, trees and other exercises |
-| `src/Mavo_Le_Hisuve/Ex4/` | Additional array and algorithm practice |
-| `src/Architecture/` | A separate student-grade exercise |
+| Project | What it does | Entry point |
+| --- | --- | --- |
+| [Spreadsheet engine](src/Mavo_Le_Hisuve/spreadsheet_engine/) | Edits a cell grid, evaluates arithmetic formulas and references, reports formula/cycle errors, and saves or loads sheet content | `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp` |
+| [Number-base calculator](src/Mavo_Le_Hisuve/number_base_calculator/) | Parses and converts textual numbers in supported bases and runs an interactive arithmetic example | `Mavo_Le_Hisuve.number_base_calculator.BaseNumberCalculatorApp` |
+| `src/Mavo_Le_Hisuve/Ex3/` | Geometry, filters, lists and trees | Independent examples |
+| `src/Mavo_Le_Hisuve/Ex4/` | Additional array and algorithm practice | Independent examples |
+| `src/Architecture/` | Student-grade modeling exercise | Independent example |
 
-### Spreadsheet design
+## Spreadsheet architecture
 
-`Ex2Sheet` owns the cell grid and coordinates formula evaluation, reference resolution, dependency ordering and persistence. `SCell` stores cell content and display type; the `Compute/` classes distinguish numbers, text and formula errors. `Ex2GUI` renders and edits the grid using the included `StdDrawEx2` support class. The evaluator covers arithmetic operators and cell references; functions such as `if` or `sin` are explicitly outside the implemented feature set.
+`SpreadsheetApp` renders the grid and sends edits to the `Sheet` interface. `Spreadsheet` owns the two-dimensional cells, resolves references and coordinates recalculation and text-file persistence. `SCell` stores each cell's raw content and its relationship to the sheet. Types in `Compute/` distinguish numeric results, text and formula errors. A dependency-depth pass identifies formulas that can be evaluated and marks circular references as errors. The parser covers arithmetic and cell references; it does not implement general spreadsheet functions such as `IF` or `SIN`.
+
+The GUI uses the included `SpreadsheetCanvas` drawing support, adapted from course material. The original course interfaces, support code and reference artifact remain alongside the implementation. The screenshot below shows the intended desktop interface.
 
 ![Spreadsheet GUI example](https://github.com/user-attachments/assets/339f699e-356f-490c-aba2-0c88c8009ec1)
 
-## Run a focused example
+## Run the projects
 
-With a JDK installed, the Ex1 console program can be compiled without the other exercises:
+Use a JDK and run these commands from the repository root. The calculator has no external runtime dependency:
 
 ```bash
-javac -d out src/Mavo_Le_Hisuve/Ex1/Ex1.java src/Mavo_Le_Hisuve/Ex1/Ex1Main.java
-java -cp out Mavo_Le_Hisuve.Ex1.Ex1Main
+mkdir -p out
+javac -d out src/Mavo_Le_Hisuve/number_base_calculator/BaseNumberCalculator.java src/Mavo_Le_Hisuve/number_base_calculator/BaseNumberCalculatorApp.java
+java -cp out Mavo_Le_Hisuve.number_base_calculator.BaseNumberCalculatorApp
 ```
 
-For the spreadsheet GUI, run `Mavo_Le_Hisuve.Ex2.Ex2GUI` from a Java IDE with `src/` marked as the source root. Test files use JUnit; configure that dependency separately before running them. The repository contains course-provided interfaces, support classes and test material alongside original exercise code.
+For the spreadsheet, open the repository in a Java IDE with `src/` marked as a source root and run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp`. It requires a desktop display. `SpreadsheetTest.java` and `BaseNumberCalculatorTest.java` use JUnit; configure the relevant JUnit dependency in the IDE before running them. There is no unified Maven or Gradle build for the full coursework repository.
 
+## Read the code
 
-## Spreadsheet workflow
+For the spreadsheet, start with `SpreadsheetApp.java`, then follow the `Sheet` interface into `Spreadsheet.java`, `SCell.java` and `Compute/`. For the calculator, begin with `BaseNumberCalculatorApp.java` and inspect the conversion and validation methods in `BaseNumberCalculator.java`. Each named project also has its own README with a focused file map and execution notes.
 
-The spreadsheet is the most substantial part of this repository. A user edits a cell through `Ex2GUI`; `Ex2Sheet` stores the grid and asks `SCell` to classify its content. Plain numbers and text can be displayed directly. A formula is parsed as an arithmetic expression, and references cause the evaluator to inspect other cells. Dependency depth and cycle checks prevent a circular chain from being treated as a numeric result. Error types distinguish invalid formulas and circular references. The sheet can save and load a text representation, so a session is not limited to the GUI runtime.
+## Scope and provenance
 
-The GUI uses `StdDrawEx2`, which is included with the course material. The engine and UI are separable when reading the code: start with `Ex2Sheet.java`, then `SCell.java` and the `Compute/` package, and finally `Ex2GUI.java`. `Ex2SheetTest.java` captures expected spreadsheet behavior.
-
-## Other exercises and provenance
-
-`Ex1` implements base-number parsing and arithmetic as a console exercise. `Ex3` explores geometric types, filters and data structures. `Ex4` and `Architecture/` contain separate algorithm and student-grade exercises. These directories are independent assignments rather than layers of one application. The repository also includes teaching interfaces, drawing support and test scaffolding; inspect file headers when attributing an individual component.
-
-## Practical limits
-
-The formula language is intentionally narrower than Excel or Google Sheets: basic arithmetic and cell references are the useful path, while functions such as `sin` and `if` are not implemented. There is no Maven or Gradle project file tying all exercises together, so an IDE with `src/` as the source root is the simplest way to explore the larger coursework. A JDK and a configured JUnit dependency are needed to run the corresponding tests.
+This repository contains independent academic exercises and some supplied course scaffolding. The spreadsheet is a local desktop application, not a replacement for Excel or a multi-user service. The calculator demonstrates base conversion rather than an arbitrary-precision numeric library. The remaining `Ex3`/`Ex4` folders have not been renamed as part of this focused cleanup; their code is unrelated to the two projects above.

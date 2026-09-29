@@ -1,19 +1,34 @@
 # Spreadsheet Engine
 
-A Java desktop worksheet that evaluates arithmetic formulas and cell references. Its default sheet has 9 columns and 17 rows, with a GUI for editing and inspecting cells. The application is a focused demonstration of parsing, dependency ordering, and object-oriented separation between a model and its interface.
+A Java desktop worksheet that connects a visible cell grid to a formula evaluator. The application keeps input, display state and calculation separate, so the path from a user edit to a computed cell can be followed through clear components.
 
-## What happens when a cell changes
+## Features
 
-`SpreadsheetApp` receives the edit from the GUI and writes the entered text through the `Sheet` interface. `Spreadsheet` stores it in an `SCell`, then calculates what should be displayed. Numeric input can be parsed directly. Input beginning with `=` goes through the formula evaluator, which handles parentheses, `+`, `-`, `*`, `/`, and references such as `A0`. Other input is represented as text or a formula error as appropriate. The classes in `Compute/` provide distinct result types for those cases.
+- A 9-column by 17-row worksheet with keyboard and mouse interaction.
+- Text, numeric values and formulas beginning with `=`.
+- Arithmetic operators, parentheses and references such as `A0`.
+- Dependency-depth calculation for formulas that refer to other cells.
+- Detection of circular references and formula errors.
+- Save and load through a simple text format containing coordinates and cell data.
 
-Dependencies matter when formulas refer to one another. The `depth()` method gives cells an evaluation order based on the references it finds. If references form a cycle, they cannot receive a finite depth and the sheet reports a cycle error. Tests include a chain of references and a two-cell cycle. This is an intentionally small formula language, so a reviewer can follow the parser and dependency logic within one core class.
+For example, put `5` in `A0` and `=A0+7` in `B0`; the displayed result is `12`.
 
-The sheet can save non-empty cells to a text file as coordinate/data records and load that format later. This is persistence for the exercise, not an Excel workbook importer. `SpreadsheetCanvas` supplies the drawing primitives used by the GUI; it is adapted course support code. `SpreadsheetConfig` holds grid dimensions and display constants, while `CellEntry` and `Index2D` represent locations in the grid.
+## Architecture
+
+```text
+SpreadsheetApp → Sheet interface → Spreadsheet grid
+       │                               ├─ SCell values
+       └─ SpreadsheetCanvas           └─ Compute result types
+```
+
+`SpreadsheetApp` handles interaction. `Spreadsheet` implements the `Sheet` contract and owns the cells. `SCell` tracks entered content and calculated display state. The types in `Compute/` distinguish numbers, text and formula errors. Reference depth determines which cells can be evaluated first; cycles have no finite order and are shown as an error.
 
 ## Run and inspect
 
-Open the repository in a Java IDE with `src/` as a source root. With JDK 21 or newer and a desktop display, run `Mavo_Le_Hisuve.spreadsheet_engine.SpreadsheetApp`. Start reading at `SpreadsheetApp.java` for UI flow and `Spreadsheet.java` for formula and reference logic. `SpreadsheetTest.java` uses JUnit 5 and contains examples of arithmetic, cell references, bounds, and dependency depth.
+Open the repository in a Java IDE, mark `src/` as a source root and run `SpreadsheetApp` with JDK 21 or newer and a desktop display. Configure JUnit 5 separately to run `SpreadsheetTest.java`.
 
-The current implementation does not provide spreadsheet functions such as `IF` or `SIN`, network collaboration, or `.xlsx` support. The included course reference JAR is preserved for provenance and is not needed to launch the app.
+For a code review, start with `SpreadsheetApp.java`, follow an edit into `Spreadsheet.java`, then inspect `SCell.java` and the result types. The tests cover parsing, references, bounds and cycle depth.
 
-[Back to the repository overview](../../../README.md).
+The save format is specific to this application. It does not read or write `.xlsx` files, and the formula parser supports only the operators implemented in the source.
+
+[Back to the Java projects](../../../README.md).

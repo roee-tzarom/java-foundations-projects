@@ -1,16 +1,27 @@
 # Number-Base Calculator
 
-A Java console project for exploring positional number systems. It validates textual numbers, converts between supported bases and decimal integers, and demonstrates arithmetic with values entered in different representations.
+A Java console application for validating and converting positional numbers. It accepts decimal values and values marked with a source-base suffix, then performs comparisons and arithmetic through integer conversion.
 
-## How the notation works
+## Input notation
 
-The calculator accepts ordinary decimal digits and a suffix form that records the source base. For example, `10011b2` denotes binary `10011`, which converts to decimal `19`. `BaseNumberCalculator.number2Int` parses an input value, while `int2Number` formats a nonnegative integer in a requested base from 2 through 16. The class also includes value comparison across representations and a helper that finds the index of the greatest valid value in an array.
+`10011b2` means the digit sequence `10011` in base 2, equivalent to decimal `19`. The parser validates each digit against the declared base before converting it. Formatting supports bases 2 through 16.
 
-`BaseNumberCalculatorApp` provides an interactive flow that asks for two numbers, validates them, and prints conversion and arithmetic results. The separate `BaseNumberCalculatorTest` file contains JUnit 5 cases for valid and invalid representations, conversion, comparison, and maximum selection. The routines use Java `int`, so very large numbers and arbitrary precision are outside the design.
+## Main operations
+
+| Method | Purpose |
+| --- | --- |
+| `number2Int` | Convert a supported textual representation to a decimal integer |
+| `toDecimal` | Convert digits from a supplied base |
+| `isNumber` | Validate an input string |
+| `int2Number` | Format an integer in a selected base |
+| `equals` | Compare values written in different representations |
+| `maxIndex` | Find the greatest valid value in an array |
+
+`BaseNumberCalculatorApp` guides a user through entering two values and viewing conversion and arithmetic results. `BaseNumberCalculatorTest.java` has JUnit 5 checks for valid and invalid strings and conversions.
 
 ## Run
 
-From the repository root, compile and launch the console application with a JDK:
+From the repository root with a JDK:
 
 ```bash
 mkdir -p out
@@ -18,6 +29,6 @@ javac -d out src/Mavo_Le_Hisuve/number_base_calculator/BaseNumberCalculator.java
 java -cp out Mavo_Le_Hisuve.number_base_calculator.BaseNumberCalculatorApp
 ```
 
-JUnit 5 must be configured separately to run the tests. This is a small teaching project rather than a general numeric parsing library.
+The implementation uses Java `int`, so it does not provide arbitrary-precision arithmetic. The calculator is independent of the spreadsheet application in the same repository.
 
-[Back to the repository overview](../../../README.md).
+[Back to the Java projects](../../../README.md).
